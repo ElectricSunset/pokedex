@@ -45,7 +45,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        inter: ['Inter', 'sans-serif'],
+        sans: ['var(--font-poppins)', 'sans-serif'],
       },
     },
   },
