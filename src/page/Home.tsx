@@ -2,8 +2,11 @@ import React from 'react';
 import Navigation from '../components/Navbar';
 import Searchbar from '../components/Searchbar';
 import Cards from '../components/Cards';
+import Footer from '../components/Footer';
 
 const Home: React.FC = () => {
+  const items = Array.from({ length: 24 }, (_, i) => i + 1);
+
   return (
     <div className='bg-primary-300'>
       <Navigation />
@@ -31,12 +34,25 @@ const Home: React.FC = () => {
           className='absolute bottom-[0%] z-10 w-full'
         />
       </div>
-      <div className='bg-white px-30 pt-5'>
-        <h2 className='text-display-md font-bold'>List Pokémon</h2>
-        <div className='flex'>
-          <Cards></Cards>
+      <div className='flex flex-col bg-white px-30 pt-5 pb-20'>
+        <h2 className='text-display-md pb-6 font-bold'>List Pokémon</h2>
+        <div className='grid grid-cols-4 gap-4'>
+          {items.map((item) => (
+            <Cards
+              key={item}
+              name='Ditto'
+              id='001'
+              imgUrl='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg'
+              type1='grass'
+              type2='Jelly'
+            />
+          ))}
         </div>
+        <button className='mx-auto mt-6 rounded-full border border-neutral-300 px-20 py-2.75'>
+          <p>Load More</p>
+        </button>
       </div>
+      <Footer />
     </div>
   );
 };
