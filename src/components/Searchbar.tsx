@@ -1,10 +1,6 @@
 import * as React from 'react';
 
-import { cn } from '../lib/utils';
-
-interface SearchbarProps {
-  className?: string;
-}
+import { cn, type classNameProps } from '../lib/utils';
 
 function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   return (
@@ -17,7 +13,7 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   );
 }
 
-const Searchbar: React.FC<SearchbarProps> = ({ className }) => {
+const Searchbar: React.FC<classNameProps> = ({ className }) => {
   return (
     <div className={cn('', className)}>
       <div className='flex-between mx-auto max-w-130 gap-1 rounded-full bg-white px-6 py-2'>

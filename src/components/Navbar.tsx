@@ -1,9 +1,12 @@
 import React from 'react';
+import { cn, type classNameProps } from '../lib/utils';
 
-const Navigation: React.FC = () => {
+const Navigation: React.FC<classNameProps> = ({ className }) => {
   return (
-    <div className='flex-center p-5'>
-      <div className='fixed top-0'>
+    <header
+      className={cn('bg-primary-300 fixed top-0 z-30 w-full p-5', className)}
+    >
+      <div className='flex-center'>
         <div className='flex-center'>
           <img src='/Icons/Pokeball-Icon.svg' className='h-10 w-10' />
           <p className='text-2xl leading-9 font-semibold tracking-tight text-neutral-900'>
@@ -11,7 +14,7 @@ const Navigation: React.FC = () => {
           </p>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
