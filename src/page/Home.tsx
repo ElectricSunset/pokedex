@@ -1,11 +1,81 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navbar';
 import Searchbar from '../components/Searchbar';
 import Cards from '../components/Cards';
 import Footer from '../components/Footer';
+import { getPokemonList, getPokemonByURL } from '../api/PokemonApi';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from '../features/store';
+import {
+  setPokemonNextList,
+  setPokemonList,
+} from '../features/pokemonListSlice';
+
+interface PokemonResponseProps {
+  name: string;
+  url: string;
+}
+
+function padToThreeDigits(num: string | number): string {
+  return num.toString().padStart(3, '0');
+}
 
 const Home: React.FC = () => {
   const items = Array.from({ length: 24 }, (_, i) => i + 1);
+  const dispatch = useDispatch();
+  const nextPokemonList = useSelector(
+    (state: RootState) => state.pokemonList.nextList
+  );
+  const homePokemonList = useSelector(
+    (state: RootState) => state.pokemonList.homePokemonList
+  );
+
+  const fetchAllPokemonData = async (pokemonArray: PokemonResponseProps[]) => {
+    try {
+      const responses = await Promise.all(
+        pokemonArray.map((pokemon) => getPokemonByURL(pokemon.url))
+      );
+
+      const mapped = responses.map((data) => ({
+        id: padToThreeDigits(data.id),
+        name: data.name,
+        type1: data.types[0]?.type.name ?? null,
+        type2: data.types[1]?.type.name ?? null,
+        artwork: data.sprites.other['official-artwork'].front_default,
+      }));
+
+      dispatch(setPokemonList(mapped));
+      console.log(responses.length, ' Pokemon Data inserted to Pokedex');
+    } catch (error) {
+      console.error('Error fetching Pokémon data:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchPokemonList = async () => {
+      const pokemonListResponse = await getPokemonList(24, 0);
+      dispatch(setPokemonNextList(pokemonListResponse.next));
+      fetchAllPokemonData(pokemonListResponse.results);
+    };
+
+    fetchPokemonList();
+  }, []);
+
+  const getMorePokemon = async () => {
+    if (nextPokemonList) {
+      const pokemonListResponse = await getPokemonByURL(nextPokemonList);
+      dispatch(setPokemonNextList(pokemonListResponse.next));
+      fetchAllPokemonData(pokemonListResponse.results);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (homePokemonList) {
+  //     // Run logic when nextList changes
+  //     console.log('nextList changed:', homePokemonList);
+  //     // Fetch new Pokémon or do something else
+  //   }
+  // }, [homePokemonList]);
 
   return (
     <div className='bg-primary-300'>
@@ -37,18 +107,21 @@ const Home: React.FC = () => {
       <div className='flex flex-col bg-white px-30 pt-5 pb-20'>
         <h2 className='text-display-md pb-6 font-bold'>List Pokémon</h2>
         <div className='grid grid-cols-4 gap-4'>
-          {items.map((item) => (
+          {homePokemonList.map((item) => (
             <Cards
-              key={item}
-              name='Ditto'
-              id='001'
-              imgUrl='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg'
-              type1='grass'
-              type2='Jelly'
+              key={item.id}
+              name={item.name}
+              id={item.id}
+              imgUrl={item.artwork}
+              type1={item.type1}
+              type2={item.type2}
             />
           ))}
         </div>
-        <button className='mx-auto mt-6 rounded-full border border-neutral-300 px-20 py-2.75'>
+        <button
+          className='mx-auto mt-6 cursor-pointer rounded-full border border-neutral-300 px-20 py-2.75'
+          onClick={getMorePokemon}
+        >
           <p>Load More</p>
         </button>
       </div>
