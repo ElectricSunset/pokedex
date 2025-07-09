@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn, type classNameProps } from '../lib/utils';
+import { PokemonTag } from './Tags';
 
 interface PokemonCardProps extends classNameProps {
   name: string;
@@ -34,27 +35,10 @@ const Cards: React.FC<PokemonCardProps> = ({
         <p className='text-neutral-500'>{id}</p>
         <p className='text-xl font-semibold'>{name}</p>
         <div className='flex gap-2 pt-4'>
-          <PokemonTypeTag type={type1} />
-          {type2 && <PokemonTypeTag type={type2} />}
+          <PokemonTag tag={type1} />
+          {type2 && <PokemonTag tag={type2} />}
         </div>
       </div>
-    </div>
-  );
-};
-
-interface PokemonTypeTagProps extends classNameProps {
-  type: string | null;
-}
-
-const PokemonTypeTag: React.FC<PokemonTypeTagProps> = ({ className, type }) => {
-  return (
-    <div
-      className={cn(
-        'rounded-md border border-neutral-300 px-2 py-0.5',
-        className
-      )}
-    >
-      <span className='text-sm'>{type}</span>
     </div>
   );
 };
