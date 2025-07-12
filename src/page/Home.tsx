@@ -10,14 +10,11 @@ import {
   setPokemonNextList,
   setPokemonList,
 } from '../features/pokemonListSlice';
+import { padToThreeDigits } from '../lib/utils';
 
 interface PokemonResponseProps {
   name: string;
   url: string;
-}
-
-function padToThreeDigits(num: string | number): string {
-  return num.toString().padStart(3, '0');
 }
 
 const Home: React.FC = () => {
@@ -28,7 +25,7 @@ const Home: React.FC = () => {
   const homePokemonList = useSelector(
     (state: RootState) => state.pokemonList.homePokemonList
   );
-
+  // Make State to save current pokemon details
   const fetchAllPokemonData = async (pokemonArray: PokemonResponseProps[]) => {
     try {
       const responses = await Promise.all(
@@ -37,10 +34,22 @@ const Home: React.FC = () => {
 
       const mapped = responses.map((data) => ({
         id: padToThreeDigits(data.id),
+        arrayId: data.id - 1,
         name: data.name,
+        weight: data.weight / 10,
+        height: data.height / 10,
         type1: data.types[0]?.type.name ?? null,
         type2: data.types[1]?.type.name ?? null,
+        abilities1: data.abilities[0]?.ability.name ?? null,
+        abilities2: data.abilities[1]?.ability.name ?? null,
         artwork: data.sprites.other['official-artwork'].front_default,
+        sprites: data.sprites['front_default'],
+        hp: data.stats[0]['base_stat'],
+        attack: data.stats[1]['base_stat'],
+        defense: data.stats[2]['base_stat'],
+        specialAttack: data.stats[3]['base_stat'],
+        specialDefense: data.stats[4]['base_stat'],
+        speed: data.stats[5]['base_stat'],
       }));
 
       dispatch(setPokemonList(mapped));
@@ -68,13 +77,13 @@ const Home: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (homePokemonList) {
-  //     // Run logic when nextList changes
-  //     console.log('nextList changed:', homePokemonList);
-  //     // Fetch new Pokémon or do something else
-  //   }
-  // }, [homePokemonList]);
+  useEffect(() => {
+    if (homePokemonList) {
+      // Run logic when nextList changes
+      console.log('nextList changed:', homePokemonList);
+      // Fetch new Pokémon or do something else
+    }
+  }, [homePokemonList]);
 
   return (
     <div className='bg-primary-300'>

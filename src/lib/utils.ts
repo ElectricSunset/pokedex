@@ -9,6 +9,10 @@ export interface classNameProps {
   className?: string;
 }
 
+export function padToThreeDigits(num: string | number): string {
+  return num.toString().padStart(3, '0');
+}
+
 export function trimTransparentPixels(
   image: HTMLImageElement
 ): HTMLCanvasElement | null {

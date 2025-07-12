@@ -132,7 +132,7 @@ const Details: React.FC = () => {
     </div>
     // API : pokemon-species/1/
     // flavor_text_entries
-    // evolution_schain
+    // evolution_chain
 
     // API : evolution-chain/1/
   );
