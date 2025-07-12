@@ -21,7 +21,6 @@ function padToThreeDigits(num: string | number): string {
 }
 
 const Home: React.FC = () => {
-  const items = Array.from({ length: 24 }, (_, i) => i + 1);
   const dispatch = useDispatch();
   const nextPokemonList = useSelector(
     (state: RootState) => state.pokemonList.nextList

@@ -1,8 +1,43 @@
 import React from 'react';
 import { SearchNavigation } from '../components/Navbar';
 import { PokemonTag } from '../components/Tags';
+import { trimTransparentPixels } from '../lib/utils';
+import { useState, useEffect } from 'react';
 
 const Details: React.FC = () => {
+  const [imageUrl, setImageUrl] = useState('');
+  const [trimmedSrc, setTrimmedSrc] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setImageUrl(
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png'
+    );
+    if (!imageUrl) return;
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = imageUrl;
+
+    img.onload = () => {
+      const trimmedCanvas = trimTransparentPixels(img);
+      if (trimmedCanvas) {
+        setTrimmedSrc(trimmedCanvas.toDataURL());
+        setError(null);
+      } else {
+        setError('Image is fully transparent or could not be trimmed.');
+        setTrimmedSrc(null);
+      }
+    };
+
+    img.onerror = () => {
+      setError(
+        'Failed to load image. Make sure the URL is correct and allows CORS.'
+      );
+      setTrimmedSrc(null);
+    };
+  }, []);
+
   return (
     <div>
       <SearchNavigation />
@@ -17,31 +52,36 @@ const Details: React.FC = () => {
             alt='bulbasaur'
             className='h-120 w-120'
           />
-          <div>
-            <img src='/Icons/Pokeball-3d.svg' />
+          <div className='flex w-169 flex-col gap-5'>
             <div>
-              <p className='font-regular text-lg text-neutral-500'>001</p>
-              <h1 className='text-display-xl font-bold'>Bulbasaur</h1>
-              <p>lorem*4</p>
-            </div>
-            <div className='flex-between'>
+              <img src='/Icons/Pokeball-3d.svg' />
               <div>
-                <h2 className='text-xl font-semibold'>Type</h2>
-                <div className='flex space-x-3'>
-                  <PokemonTag tag='Grass' />
-                  <PokemonTag tag='Poison' />
-                </div>
-              </div>
-              <div>
-                <h2 className='text-xl font-semibold'>Abilities</h2>
-                <div className='flex space-x-3'>
-                  <PokemonTag tag='Overgrow' />
-                  <PokemonTag tag='Chlorophyll' />
-                </div>
+                <p className='font-regular text-lg text-neutral-500'>001</p>
+                <h1 className='text-display-xl font-bold'>Bulbasaur</h1>
+                <p>lorem*4</p>
               </div>
             </div>
+            <div className='w-full border-t border-gray-300' />
             <div>
-              <div>
+              <div className='flex'>
+                <div className='flex-[5.0] basis-80'>
+                  <h2 className='text-xl font-semibold'>Type</h2>
+                  <div className='flex space-x-3'>
+                    <PokemonTag tag='Grass' />
+                    <PokemonTag tag='Poison' />
+                  </div>
+                </div>
+                <div className='flex-[5.0] basis-80'>
+                  <h2 className='text-xl font-semibold'>Abilities</h2>
+                  <div className='flex space-x-3'>
+                    <PokemonTag tag='Overgrow' />
+                    <PokemonTag tag='Chlorophyll' />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='flex'>
+              <div className='flex-[5.0] basis-80'>
                 <div>
                   <h2 className='text-xl font-semibold'>Size</h2>
                 </div>
@@ -68,15 +108,25 @@ const Details: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div>
-                <p>Artwork</p>
+              <div className='flex-[5.0] basis-80'>
+                <p className='text-xl font-semibold'>Artwork</p>
                 <img
-                  src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+                  src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png'
                   alt='sprites'
+                  className='h-20 w-20 shrink-0'
                 />
               </div>
             </div>
+            <div className='w-full border-t border-gray-300' />
+            <div>
+              <h3 className='text-xl font-semibold'>Stats</h3>
+              {/* Insert Status Bar */}
+            </div>
           </div>
+        </div>
+        <div className='mt-12'>
+          <h3 className='text-display-md mb-8 font-bold'>Evolution Chain</h3>
+          {/* smol Card */}
         </div>
       </div>
     </div>
