@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Navigation from '../components/Navbar';
 import Searchbar from '../components/Searchbar';
 import Cards from '../components/Cards';
 import Footer from '../components/Footer';
-import { getPokemonList, getPokemonByURL } from '../api/PokemonApi';
+import {
+  getPokemonList,
+  getPokemonByURL,
+  getAllPokemonData,
+} from '../api/PokemonApi';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../features/store';
 import {
   setPokemonNextList,
   setPokemonList,
 } from '../features/pokemonListSlice';
-import { padToThreeDigits } from '../lib/utils';
-
-interface PokemonResponseProps {
-  name: string;
-  url: string;
-}
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,45 +23,13 @@ const Home: React.FC = () => {
   const homePokemonList = useSelector(
     (state: RootState) => state.pokemonList.homePokemonList
   );
-  // Make State to save current pokemon details
-  const fetchAllPokemonData = async (pokemonArray: PokemonResponseProps[]) => {
-    try {
-      const responses = await Promise.all(
-        pokemonArray.map((pokemon) => getPokemonByURL(pokemon.url))
-      );
-
-      const mapped = responses.map((data) => ({
-        id: padToThreeDigits(data.id),
-        arrayId: data.id - 1,
-        name: data.name,
-        weight: data.weight / 10,
-        height: data.height / 10,
-        type1: data.types[0]?.type.name ?? null,
-        type2: data.types[1]?.type.name ?? null,
-        abilities1: data.abilities[0]?.ability.name ?? null,
-        abilities2: data.abilities[1]?.ability.name ?? null,
-        artwork: data.sprites.other['official-artwork'].front_default,
-        sprites: data.sprites['front_default'],
-        hp: data.stats[0]['base_stat'],
-        attack: data.stats[1]['base_stat'],
-        defense: data.stats[2]['base_stat'],
-        specialAttack: data.stats[3]['base_stat'],
-        specialDefense: data.stats[4]['base_stat'],
-        speed: data.stats[5]['base_stat'],
-      }));
-
-      dispatch(setPokemonList(mapped));
-      console.log(responses.length, ' Pokemon Data inserted to Pokedex');
-    } catch (error) {
-      console.error('Error fetching Pokémon data:', error);
-    }
-  };
 
   useEffect(() => {
     const fetchPokemonList = async () => {
       const pokemonListResponse = await getPokemonList(24, 0);
       dispatch(setPokemonNextList(pokemonListResponse.next));
-      fetchAllPokemonData(pokemonListResponse.results);
+      const mapped = getAllPokemonData(pokemonListResponse.results);
+      dispatch(setPokemonList(mapped));
     };
 
     fetchPokemonList();
@@ -73,7 +39,8 @@ const Home: React.FC = () => {
     if (nextPokemonList) {
       const pokemonListResponse = await getPokemonByURL(nextPokemonList);
       dispatch(setPokemonNextList(pokemonListResponse.next));
-      fetchAllPokemonData(pokemonListResponse.results);
+      const mapped = getAllPokemonData(pokemonListResponse.results);
+      dispatch(setPokemonList(mapped));
     }
   };
 
