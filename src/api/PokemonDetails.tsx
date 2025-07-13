@@ -11,12 +11,15 @@ export const getPokemonDesc = async (arrayID: number) => {
 };
 
 type EvolutionNode = {
-  species: string;
+  species: {
+    name: string;
+    url: string;
+  };
   evolves_to?: EvolutionNode[];
 };
 
 const traverseEvolution = (node: EvolutionNode): string[] => {
-  let result = [`https://pokeapi.co/api/v2/pokemon/${node.species}/`];
+  let result = [`https://pokeapi.co/api/v2/pokemon/${node.species.name}/`];
 
   if (node.evolves_to && node.evolves_to.length > 0) {
     for (const child of node.evolves_to) {
@@ -29,7 +32,7 @@ const traverseEvolution = (node: EvolutionNode): string[] => {
 
 export const getPokemonEvolution = async (evolutionURL: string) => {
   const response = await api.get(`${evolutionURL}/`);
-  const evolutionChainURL = traverseEvolution(response.data);
+  const evolutionChainURL = traverseEvolution(response.data.chain);
 
   const evolutionChainResponses = await Promise.all(
     evolutionChainURL.map((pokemonURL) => getPokemonByURL(pokemonURL))

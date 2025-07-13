@@ -2,13 +2,14 @@ import React from 'react';
 import { cn, type classNameProps } from '../lib/utils';
 import { PokemonTag } from './Tags';
 
-interface PokemonCardProps extends classNameProps {
+export interface PokemonCardProps extends classNameProps {
   name: string;
   id: string;
   imgUrl: string;
   soundUrl?: string;
   type1: string;
   type2: string | null;
+  onClick?: any;
 }
 
 const Cards: React.FC<PokemonCardProps> = ({
@@ -19,6 +20,7 @@ const Cards: React.FC<PokemonCardProps> = ({
   type1,
   type2,
   className,
+  onClick = () => {},
 }) => {
   return (
     <div
@@ -26,6 +28,7 @@ const Cards: React.FC<PokemonCardProps> = ({
         'max-h-96 max-w-72 cursor-pointer rounded-4xl border border-neutral-300 p-6',
         className
       )}
+      onClick={onClick}
     >
       <div className='flex-center relative mx-auto h-50 w-50'>
         <div className='absolute z-0 h-50 w-50 rounded-full bg-gray-100' />

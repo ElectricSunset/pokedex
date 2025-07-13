@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import Navigation from '../components/Navbar';
 import Searchbar from '../components/Searchbar';
-import Cards from '../components/Cards';
+import Cards, { type PokemonCardProps } from '../components/Cards';
 import Footer from '../components/Footer';
 import {
   getPokemonList,
   getPokemonByURL,
   getAllPokemonData,
 } from '../api/PokemonApi';
+
+import { getPokemonEvolution, getPokemonDesc } from '../api/PokemonDetails';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../features/store';
 import {
@@ -28,7 +30,7 @@ const Home: React.FC = () => {
     const fetchPokemonList = async () => {
       const pokemonListResponse = await getPokemonList(24, 0);
       dispatch(setPokemonNextList(pokemonListResponse.next));
-      const mapped = getAllPokemonData(pokemonListResponse.results);
+      const mapped = await getAllPokemonData(pokemonListResponse.results);
       dispatch(setPokemonList(mapped));
     };
 
@@ -39,18 +41,26 @@ const Home: React.FC = () => {
     if (nextPokemonList) {
       const pokemonListResponse = await getPokemonByURL(nextPokemonList);
       dispatch(setPokemonNextList(pokemonListResponse.next));
-      const mapped = getAllPokemonData(pokemonListResponse.results);
+      const mapped = await getAllPokemonData(pokemonListResponse.results);
       dispatch(setPokemonList(mapped));
     }
   };
 
-  useEffect(() => {
-    if (homePokemonList) {
-      // Run logic when nextList changes
-      console.log('nextList changed:', homePokemonList);
-      // Fetch new Pokémon or do something else
-    }
-  }, [homePokemonList]);
+  const handleMoreDetails = async (
+    event: React.MouseEvent<HTMLElement>,
+    arrayId: number
+  ) => {
+    const [desc, evoURL] = await getPokemonDesc(arrayId);
+    console.log(evoURL);
+    const evolution = await getPokemonEvolution(evoURL);
+    console.log(evolution);
+  };
+
+  // useEffect(() => {
+  //   if (homePokemonList) {
+  //     console.log('nextList changed:', homePokemonList);
+  //   }
+  // }, [homePokemonList]);
 
   return (
     <div className='bg-primary-300'>
@@ -90,6 +100,9 @@ const Home: React.FC = () => {
               imgUrl={item.artwork}
               type1={item.type1}
               type2={item.type2}
+              onClick={(e: React.MouseEvent<HTMLElement>) =>
+                handleMoreDetails(e, item.arrayId)
+              }
             />
           ))}
         </div>
