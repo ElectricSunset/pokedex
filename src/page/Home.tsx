@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Navigation from '../components/Navbar';
 import Searchbar from '../components/Searchbar';
 import Cards, { type PokemonCardProps } from '../components/Cards';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import {
   getPokemonList,
@@ -15,10 +16,13 @@ import type { RootState } from '../features/store';
 import {
   setPokemonNextList,
   setPokemonList,
+  type CurrentPokemonDetails,
+  setPokemonDetails,
 } from '../features/pokemonListSlice';
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const nextPokemonList = useSelector(
     (state: RootState) => state.pokemonList.nextList
   );
@@ -51,16 +55,16 @@ const Home: React.FC = () => {
     arrayId: number
   ) => {
     const [desc, evoURL] = await getPokemonDesc(arrayId);
-    console.log(evoURL);
     const evolution = await getPokemonEvolution(evoURL);
-    console.log(evolution);
+    const currentPokemonData = homePokemonList[arrayId];
+    const currentPokemonDetails = {
+      ...currentPokemonData,
+      desc,
+      evolution,
+    } as CurrentPokemonDetails;
+    dispatch(setPokemonDetails(currentPokemonDetails));
+    navigate('/details');
   };
-
-  // useEffect(() => {
-  //   if (homePokemonList) {
-  //     console.log('nextList changed:', homePokemonList);
-  //   }
-  // }, [homePokemonList]);
 
   return (
     <div className='bg-primary-300'>
