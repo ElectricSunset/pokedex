@@ -1,64 +1,45 @@
 import React from 'react';
 import { SearchNavigation } from '../components/Navbar';
 import { PokemonTag } from '../components/Tags';
-import { trimTransparentPixels } from '../lib/utils';
-import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import type { RootState } from '../features/store';
 
 const Details: React.FC = () => {
-  const [imageUrl, setImageUrl] = useState('');
-  const [trimmedSrc, setTrimmedSrc] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setImageUrl(
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png'
-    );
-    if (!imageUrl) return;
-
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = imageUrl;
-
-    img.onload = () => {
-      const trimmedCanvas = trimTransparentPixels(img);
-      if (trimmedCanvas) {
-        setTrimmedSrc(trimmedCanvas.toDataURL());
-        setError(null);
-      } else {
-        setError('Image is fully transparent or could not be trimmed.');
-        setTrimmedSrc(null);
-      }
-    };
-
-    img.onerror = () => {
-      setError(
-        'Failed to load image. Make sure the URL is correct and allows CORS.'
-      );
-      setTrimmedSrc(null);
-    };
-  }, []);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const currentPokemon = useSelector((state: RootState) => state.pokemonDetail);
+  console.log(currentPokemon);
   return (
     <div>
       <SearchNavigation />
       <div className='px-30 pt-35'>
-        <button className='flex-center gap-2'>
+        <button
+          className='flex-center cursor-pointer gap-2'
+          onClick={() => {
+            navigate('/');
+          }}
+        >
           <img src='/Icons/Arrow-Left.svg' alt='back arrow' />
           <p className='pt-0.4'>Back</p>
         </button>
         <div className='flex space-x-12.5'>
           <img
-            src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png'
-            alt='bulbasaur'
+            src={currentPokemon.artwork}
+            alt={currentPokemon.name}
             className='h-120 w-120'
           />
           <div className='flex w-169 flex-col gap-5'>
             <div>
               <img src='/Icons/Pokeball-3d.svg' />
               <div>
-                <p className='font-regular text-lg text-neutral-500'>001</p>
-                <h1 className='text-display-xl font-bold'>Bulbasaur</h1>
-                <p>lorem*4</p>
+                <p className='font-regular text-lg text-neutral-500'>
+                  {currentPokemon.id}
+                </p>
+                <h1 className='text-display-xl font-bold'>
+                  {currentPokemon.name}
+                </h1>
+                <p>{currentPokemon.desc}</p>
               </div>
             </div>
             <div className='w-full border-t border-gray-300' />
@@ -67,15 +48,19 @@ const Details: React.FC = () => {
                 <div className='flex-[5.0] basis-80'>
                   <h2 className='text-xl font-semibold'>Type</h2>
                   <div className='flex space-x-3'>
-                    <PokemonTag tag='Grass' />
-                    <PokemonTag tag='Poison' />
+                    <PokemonTag tag={currentPokemon.type1} />
+                    {currentPokemon.type2 && (
+                      <PokemonTag tag={currentPokemon.type2} />
+                    )}
                   </div>
                 </div>
                 <div className='flex-[5.0] basis-80'>
                   <h2 className='text-xl font-semibold'>Abilities</h2>
                   <div className='flex space-x-3'>
-                    <PokemonTag tag='Overgrow' />
-                    <PokemonTag tag='Chlorophyll' />
+                    <PokemonTag tag={currentPokemon.abilities1} />
+                    {currentPokemon.abilities2 && (
+                      <PokemonTag tag={currentPokemon.abilities2} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -92,7 +77,9 @@ const Details: React.FC = () => {
                       <p className='text-neutral-700'>Weight</p>
                     </div>
                     <div className='flex-center gap-1'>
-                      <span className='text-display-md font-bold'>6.9</span>
+                      <span className='text-display-md font-bold'>
+                        {currentPokemon.weight}
+                      </span>
                       <span>kg</span>
                     </div>
                   </div>
@@ -102,7 +89,9 @@ const Details: React.FC = () => {
                       <p className='text-neutral-700'>Height</p>
                     </div>
                     <div className='flex-center gap-1'>
-                      <span className='text-display-md font-bold'>0.7</span>
+                      <span className='text-display-md font-bold'>
+                        {currentPokemon.height}
+                      </span>
                       <span>m</span>
                     </div>
                   </div>
@@ -111,8 +100,8 @@ const Details: React.FC = () => {
               <div className='flex-[5.0] basis-80'>
                 <p className='text-xl font-semibold'>Artwork</p>
                 <img
-                  src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png'
-                  alt='sprites'
+                  src={currentPokemon.sprites}
+                  alt={`${currentPokemon.name} sprites`}
                   className='h-20 w-20 shrink-0'
                 />
               </div>
@@ -130,11 +119,6 @@ const Details: React.FC = () => {
         </div>
       </div>
     </div>
-    // API : pokemon-species/1/
-    // flavor_text_entries
-    // evolution_chain
-
-    // API : evolution-chain/1/
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Navigation from '../components/Navbar';
 import Searchbar from '../components/Searchbar';
-import Cards, { type PokemonCardProps } from '../components/Cards';
+import Cards from '../components/Cards';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import {
@@ -29,6 +29,7 @@ const Home: React.FC = () => {
   const homePokemonList = useSelector(
     (state: RootState) => state.pokemonList.homePokemonList
   );
+  const currentPokemon = useSelector((state: RootState) => state.pokemonDetail);
 
   useEffect(() => {
     const fetchPokemonList = async () => {
@@ -51,7 +52,7 @@ const Home: React.FC = () => {
   };
 
   const handleMoreDetails = async (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     arrayId: number
   ) => {
     const [desc, evoURL] = await getPokemonDesc(arrayId);
@@ -62,10 +63,14 @@ const Home: React.FC = () => {
       desc,
       evolution,
     } as CurrentPokemonDetails;
+    // console.log(currentPokemonDetails);
     dispatch(setPokemonDetails(currentPokemonDetails));
     navigate('/details');
   };
 
+  useEffect(() => {
+    console.log(currentPokemon);
+  }, [currentPokemon]);
   return (
     <div className='bg-primary-300'>
       <Navigation />

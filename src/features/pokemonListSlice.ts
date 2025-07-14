@@ -11,6 +11,7 @@ interface HomePokemon {
   abilities1: string;
   abilities2: string;
   artwork: string;
+  sprites: string;
   hp: number;
   attack: number;
   defense: number;
@@ -23,7 +24,7 @@ interface PokemonListState {
   homePokemonList: HomePokemon[];
   nextList: string | null;
 }
-
+// Need to change Data Structure later to accomodate search (maybe)
 const pokemonListInitialValue: PokemonListState = {
   homePokemonList: [],
   nextList: null,
@@ -74,6 +75,8 @@ const pokemonDetailsInitialValue: CurrentPokemonDetails = {
   abilities2: 'chlorophyll',
   artwork:
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
+  sprites:
+    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
   hp: 45,
   attack: 49,
   defense: 49,
@@ -88,8 +91,8 @@ const pokemonDetailSlice = createSlice({
   name: 'pokemonDetail',
   initialState: pokemonDetailsInitialValue,
   reducers: {
-    setPokemonDetails: (state, action) => {
-      state.arrayId = action.payload;
+    setPokemonDetails: (_state, action) => {
+      return action.payload;
     },
   },
 });
