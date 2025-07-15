@@ -4,6 +4,7 @@ import { PokemonTag } from '../components/Tags';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { RootState } from '../features/store';
+import StatusBar from '../components/ProgressBar';
 
 const Details: React.FC = () => {
   const dispatch = useDispatch();
@@ -109,7 +110,14 @@ const Details: React.FC = () => {
             <div className='w-full border-t border-gray-300' />
             <div>
               <h3 className='text-xl font-semibold'>Stats</h3>
-              {/* Insert Status Bar */}
+              <StatusBar
+                hp={currentPokemon.hp}
+                attack={currentPokemon.attack}
+                defense={currentPokemon.defense}
+                specialAttack={currentPokemon.specialAttack}
+                specialDefense={currentPokemon.specialDefense}
+                speed={currentPokemon.speed}
+              />
             </div>
           </div>
         </div>
