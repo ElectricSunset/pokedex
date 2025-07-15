@@ -29,7 +29,7 @@ const Home: React.FC = () => {
   const homePokemonList = useSelector(
     (state: RootState) => state.pokemonList.homePokemonList
   );
-  const currentPokemon = useSelector((state: RootState) => state.pokemonDetail);
+  // const currentPokemon = useSelector((state: RootState) => state.pokemonDetail);
 
   useEffect(() => {
     const fetchPokemonList = async () => {
@@ -67,9 +67,9 @@ const Home: React.FC = () => {
     navigate('/details');
   };
 
-  useEffect(() => {
-    console.log(homePokemonList);
-  }, [homePokemonList]);
+  // useEffect(() => {
+  //   console.log(homePokemonList);
+  // }, [homePokemonList]);
 
   return (
     <div className='bg-primary-300'>

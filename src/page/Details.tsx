@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SearchNavigation } from '../components/Navbar';
 import { PokemonTag } from '../components/Tags';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,12 +6,51 @@ import { useNavigate } from 'react-router-dom';
 import type { RootState } from '../features/store';
 import StatusBar from '../components/ProgressBar';
 import { SmallCards } from '../components/Cards';
+import { getPokemonByURL, getPokemonDesc, mapPokemon } from '../api/PokemonApi';
+import { getPokemonEvolution } from '../api/PokemonDetails';
+import {
+  type PokemonData,
+  setPokemonDetails,
+  setPokemonList,
+} from '../features/pokemonListSlice';
 
 const Details: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentPokemon = useSelector((state: RootState) => state.pokemonDetail);
-  // console.log(currentPokemon);
+  const homePokemonList = useSelector(
+    (state: RootState) => state.pokemonList.homePokemonList
+  );
+
+  const handleGetEvolution = async (
+    _event: React.MouseEvent<HTMLElement>,
+    name: string
+  ) => {
+    let currentPokemonData = homePokemonList[name];
+    if (!homePokemonList?.[name]) {
+      const pokemon = await getPokemonByURL(
+        `https://pokeapi.co/api/v2/pokemon/${name}`
+      );
+
+      const mapped = mapPokemon(pokemon);
+      dispatch(setPokemonList(mapped));
+      currentPokemonData = mapped[0];
+    }
+    const [desc, evoURL] = await getPokemonDesc(currentPokemonData.arrayId);
+    const evolution = await getPokemonEvolution(evoURL);
+    const currentPokemonDetails = {
+      ...currentPokemonData,
+      desc,
+      evolution,
+    } as PokemonData;
+    dispatch(setPokemonDetails(currentPokemonDetails));
+    console.log(currentPokemon);
+  };
+
+  useEffect(() => {
+    navigate('/details', { replace: true });
+  }, [currentPokemon]);
+
   return (
     <div>
       <SearchNavigation />
@@ -132,6 +171,9 @@ const Details: React.FC = () => {
                   name={evo.name}
                   id={evo.id}
                   imgUrl={evo.artwork}
+                  onClick={(e: React.MouseEvent<HTMLElement>) =>
+                    handleGetEvolution(e, evo.name)
+                  }
                 />
               ))}
             </div>
