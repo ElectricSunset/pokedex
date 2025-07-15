@@ -1,6 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface HomePokemon {
+interface EvolutionChain {
+  id: string;
+  name: string;
+  artwork: string;
+}
+
+export interface PokemonData {
   id: string;
   arrayId: number;
   name: string;
@@ -18,15 +24,17 @@ interface HomePokemon {
   specialAttack: number;
   specialDefense: number;
   speed: number;
+  desc: string | null;
+  evolution: EvolutionChain[] | null;
 }
 
 interface PokemonListState {
-  homePokemonList: HomePokemon[];
+  homePokemonList: Record<string, PokemonData>;
   nextList: string | null;
 }
 // Need to change Data Structure later to accomodate search (maybe)
 const pokemonListInitialValue: PokemonListState = {
-  homePokemonList: [],
+  homePokemonList: {},
   nextList: null,
 };
 
@@ -35,12 +43,10 @@ const pokemonListSlice = createSlice({
   initialState: pokemonListInitialValue,
   reducers: {
     setPokemonList: (state, action) => {
-      const newList = action.payload;
-      const combinedList = [...state.homePokemonList, ...newList];
-      const deduplicated = Array.from(
-        new Map(combinedList.map((pokemon) => [pokemon.id, pokemon])).values()
-      );
-      state.homePokemonList = deduplicated;
+      const newList: PokemonData[] = action.payload;
+      newList.forEach((pokemon) => {
+        state.homePokemonList[pokemon.name] = pokemon;
+      });
     },
     setPokemonNextList: (state, action) => {
       state.nextList = action.payload;
@@ -51,20 +57,7 @@ const pokemonListSlice = createSlice({
 export const { setPokemonList, setPokemonNextList } = pokemonListSlice.actions;
 export const pokemonListReducer = pokemonListSlice.reducer;
 
-interface EvolutionChain {
-  id: string;
-  name: string;
-  artwork: string;
-  type1: string;
-  type2: string | null;
-}
-
-export interface CurrentPokemonDetails extends HomePokemon {
-  desc: string | null;
-  evolution: EvolutionChain[] | null;
-}
-
-const pokemonDetailsInitialValue: CurrentPokemonDetails = {
+const pokemonDetailsInitialValue: PokemonData = {
   id: '001',
   arrayId: 0,
   name: 'bulbasaur',

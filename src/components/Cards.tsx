@@ -48,13 +48,13 @@ const Cards: React.FC<PokemonCardProps> = ({
 
 export default Cards;
 
-export const SmallCards: React.FC<PokemonCardProps> = ({
+type SmallPokemonCardProps = Omit<PokemonCardProps, 'type1' | 'type2'>;
+
+export const SmallCards: React.FC<SmallPokemonCardProps> = ({
   name,
   id,
   imgUrl,
   soundUrl,
-  type1,
-  type2,
   className,
   onClick = () => {},
 }) => {

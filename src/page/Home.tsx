@@ -16,7 +16,7 @@ import type { RootState } from '../features/store';
 import {
   setPokemonNextList,
   setPokemonList,
-  type CurrentPokemonDetails,
+  type PokemonData,
   setPokemonDetails,
 } from '../features/pokemonListSlice';
 
@@ -53,24 +53,24 @@ const Home: React.FC = () => {
 
   const handleMoreDetails = async (
     _event: React.MouseEvent<HTMLElement>,
-    arrayId: number
+    name: string
   ) => {
-    const [desc, evoURL] = await getPokemonDesc(arrayId);
+    const currentPokemonData = homePokemonList[name];
+    const [desc, evoURL] = await getPokemonDesc(currentPokemonData.arrayId);
     const evolution = await getPokemonEvolution(evoURL);
-    const currentPokemonData = homePokemonList[arrayId];
     const currentPokemonDetails = {
       ...currentPokemonData,
       desc,
       evolution,
-    } as CurrentPokemonDetails;
-    // console.log(currentPokemonDetails);
+    } as PokemonData;
     dispatch(setPokemonDetails(currentPokemonDetails));
     navigate('/details');
   };
 
   useEffect(() => {
-    console.log(currentPokemon);
-  }, [currentPokemon]);
+    console.log(homePokemonList);
+  }, [homePokemonList]);
+
   return (
     <div className='bg-primary-300'>
       <Navigation />
@@ -101,7 +101,7 @@ const Home: React.FC = () => {
       <div className='flex flex-col bg-white px-30 pt-5 pb-20'>
         <h2 className='text-display-md pb-6 font-bold'>List Pokémon</h2>
         <div className='grid grid-cols-4 gap-4'>
-          {homePokemonList.map((item) => (
+          {Object.values(homePokemonList).map((item) => (
             <Cards
               key={item.id}
               name={item.name}
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
               type1={item.type1}
               type2={item.type2}
               onClick={(e: React.MouseEvent<HTMLElement>) =>
-                handleMoreDetails(e, item.arrayId)
+                handleMoreDetails(e, item.name)
               }
             />
           ))}

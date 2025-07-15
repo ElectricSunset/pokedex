@@ -132,8 +132,6 @@ const Details: React.FC = () => {
                   name={evo.name}
                   id={evo.id}
                   imgUrl={evo.artwork}
-                  type1={evo.type1}
-                  type2={evo.type2}
                 />
               ))}
             </div>
