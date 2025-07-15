@@ -41,6 +41,7 @@ export const getPokemonEvolution = async (evolutionURL: string) => {
   const mapped = evolutionChainResponses.map((data) => ({
     id: padToThreeDigits(data.id),
     name: data.name,
+    artwork: data.sprites.other['official-artwork'].front_default,
     type1: data.types[0]?.type.name ?? null,
     type2: data.types[1]?.type.name ?? null,
   }));

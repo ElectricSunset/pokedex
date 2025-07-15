@@ -54,6 +54,7 @@ export const pokemonListReducer = pokemonListSlice.reducer;
 interface EvolutionChain {
   id: string;
   name: string;
+  artwork: string;
   type1: string;
   type2: string | null;
 }
