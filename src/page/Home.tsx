@@ -74,13 +74,18 @@ const Home: React.FC = () => {
   return (
     <div className='bg-primary-300'>
       <Navigation />
-      <div className='flex-center pt-35 pb-7.5'>
+      <div className='flex-center px-4 pt-35 pb-7.5'>
         <div className='flex-center max-w-171.5 flex-col gap-3.75'>
-          <img src='/Icons/Pokemon.svg' className='h-16 w-43.75' />
-          <h1 className='text-display-2xl text-center font-bold'>
+          <img
+            src='/Icons/Pokemon.svg'
+            className='h-12.6 w-26 md:h-16 md:w-43.75'
+          />
+          <h1 className='text-display-sm md:text-display-2xl text-center font-bold'>
             Discover the Most Powerful Pokémon in the Wild!
           </h1>
-          <p>Train, Battle, and Collect Your Favorites!</p>
+          <p className='md:text-md text-sm'>
+            Train, Battle, and Collect Your Favorites!
+          </p>
         </div>
       </div>
       <Searchbar className='pb-20' />
@@ -88,19 +93,27 @@ const Home: React.FC = () => {
         <img
           src='/Icons/Charizard.svg'
           className='absolute bottom-[0%] left-[6%]'
+          style={{
+            width: 'clamp(10.06rem,22.78vw,20.5rem)',
+            height: 'clamp(10.06rem,22.78vw,20.5rem)',
+          }}
         />
         <img
           src='/Icons/Pikachu.svg'
           className='absolute right-[5.5%] bottom-[7%]'
+          style={{
+            width: 'clamp(10.06rem,22.78vw,20.5rem)',
+            height: 'clamp(10.06rem,22.78vw,20.5rem)',
+          }}
         />
         <img
           src='/Icons/Clouds.svg'
           className='absolute bottom-[0%] z-10 w-full'
         />
       </div>
-      <div className='flex flex-col bg-white px-30 pt-5 pb-20'>
+      <div className='flex flex-col bg-white px-4 pt-5 pb-10 md:px-15 md:pb-20 lg:px-30'>
         <h2 className='text-display-md pb-6 font-bold'>List Pokémon</h2>
-        <div className='grid grid-cols-4 gap-4'>
+        <div className='grid grid-cols-[repeat(auto-fit,minmax(288px,1fr))] gap-4'>
           {Object.values(homePokemonList).map((item) => (
             <Cards
               key={item.id}
@@ -116,10 +129,10 @@ const Home: React.FC = () => {
           ))}
         </div>
         <button
-          className='mx-auto mt-6 cursor-pointer rounded-full border border-neutral-300 px-20 py-2.75'
+          className='mx-auto mt-6 cursor-pointer rounded-full border border-neutral-300 px-13.25 py-2 md:px-20 md:py-2.75'
           onClick={getMorePokemon}
         >
-          <p>Load More</p>
+          <p className='md:text-md text-sm'>Load More</p>
         </button>
       </div>
       <Footer />

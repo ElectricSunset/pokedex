@@ -25,7 +25,7 @@ const Cards: React.FC<PokemonCardProps> = ({
   return (
     <div
       className={cn(
-        'max-h-96 max-w-72 cursor-pointer rounded-4xl border border-neutral-300 p-6',
+        'h-82.5 w-full cursor-pointer rounded-2xl border border-neutral-300 p-3 md:h-98 md:w-72 md:rounded-4xl md:p-6',
         className
       )}
       onClick={onClick}
@@ -34,10 +34,10 @@ const Cards: React.FC<PokemonCardProps> = ({
         <div className='absolute z-0 h-50 w-50 rounded-full bg-gray-100' />
         <img src={imgUrl} alt={name} className='absolute z-10 h-full w-full' />
       </div>
-      <div className='pt-6'>
-        <p className='text-neutral-500'>{id}</p>
-        <p className='text-xl font-semibold'>{name}</p>
-        <div className='flex gap-2 pt-4'>
+      <div className='md:pt-6'>
+        <p className='md:text-md text-sm text-neutral-500'>{id}</p>
+        <p className='text-md font-semibold md:text-xl'>{name}</p>
+        <div className='flex gap-2 pt-3 md:pt-4'>
           <PokemonTag tag={type1} />
           {type2 && <PokemonTag tag={type2} />}
         </div>
