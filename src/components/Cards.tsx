@@ -61,7 +61,7 @@ export const SmallCards: React.FC<SmallPokemonCardProps> = ({
   return (
     <div
       className={cn(
-        'w-90.5 cursor-pointer rounded-4xl border border-neutral-300 p-4 md:w-48',
+        'w-full max-w-120 min-w-40 cursor-pointer rounded-4xl border border-neutral-300 p-4 md:w-48',
         className
       )}
       onClick={onClick}

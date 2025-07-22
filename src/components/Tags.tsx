@@ -8,7 +8,7 @@ export const PokemonTag: React.FC<PokemonTagProps> = ({ className, tag }) => {
   return (
     <div
       className={cn(
-        'rounded-md border border-neutral-300 px-2 py-0.5',
+        'shrink-0 rounded-md border border-neutral-300 px-2 py-0.5',
         className
       )}
     >

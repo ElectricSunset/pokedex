@@ -55,7 +55,7 @@ const Details: React.FC = () => {
   return (
     <div>
       <SearchNavigation />
-      <div className='flex-center px-4 md:px-30'>
+      <div className='flex-center px-4 lg:px-15 xl:px-30'>
         <div className='w-full pt-35'>
           <button
             className='flex-center cursor-pointer gap-2'
