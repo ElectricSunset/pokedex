@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from '../components/Navbar';
 import Searchbar from '../components/Searchbar';
 import Cards from '../components/Cards';
@@ -23,6 +23,8 @@ import {
 const Home: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [scrolled, setScrolled] = useState(false);
   const nextPokemonList = useSelector(
     (state: RootState) => state.pokemonList.nextList
   );
@@ -30,6 +32,15 @@ const Home: React.FC = () => {
     (state: RootState) => state.pokemonList.homePokemonList
   );
   // const currentPokemon = useSelector((state: RootState) => state.pokemonDetail);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 600);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const fetchPokemonList = async () => {
@@ -40,6 +51,19 @@ const Home: React.FC = () => {
     };
 
     fetchPokemonList();
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+
+    const handleResize = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+    };
+
+    setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleResize);
+
+    return () => mediaQuery.removeEventListener('change', handleResize);
   }, []);
 
   const getMorePokemon = async () => {
@@ -67,13 +91,9 @@ const Home: React.FC = () => {
     navigate('/details');
   };
 
-  // useEffect(() => {
-  //   console.log(homePokemonList);
-  // }, [homePokemonList]);
-
   return (
     <div className='bg-primary-300'>
-      <Navigation />
+      <Navigation className={scrolled ? 'bg-white' : 'bg-primary-300'} />
       <div className='flex-center px-4 pt-35 pb-7.5'>
         <div className='flex-center max-w-171.5 flex-col gap-3.75'>
           <img
@@ -92,7 +112,7 @@ const Home: React.FC = () => {
       <div className='relative pt-33'>
         <img
           src='/Icons/Charizard.svg'
-          className='absolute bottom-[0%] left-[6%]'
+          className='absolute bottom-[-10%] left-[6%]'
           style={{
             width: 'clamp(10.06rem,22.78vw,20.5rem)',
             height: 'clamp(10.06rem,22.78vw,20.5rem)',
@@ -100,19 +120,21 @@ const Home: React.FC = () => {
         />
         <img
           src='/Icons/Pikachu.svg'
-          className='absolute right-[5.5%] bottom-[7%]'
+          className='absolute right-[5.5%] bottom-[-5%]'
           style={{
             width: 'clamp(10.06rem,22.78vw,20.5rem)',
             height: 'clamp(10.06rem,22.78vw,20.5rem)',
           }}
         />
         <img
-          src='/Icons/Clouds.svg'
+          src={isMobile ? '/Icons/Cloud.svg' : '/Icons/Clouds.svg'}
           className='absolute bottom-[0%] z-10 w-full'
         />
       </div>
       <div className='flex flex-col bg-white px-4 pt-5 pb-10 md:px-15 md:pb-20 lg:px-30'>
-        <h2 className='text-display-md pb-6 font-bold'>List Pokémon</h2>
+        <h2 className='text-display-xs md:text-display-md pb-6 font-bold'>
+          List Pokémon
+        </h2>
         <div className='grid grid-cols-[repeat(auto-fit,minmax(288px,1fr))] gap-4'>
           {Object.values(homePokemonList).map((item) => (
             <Cards
