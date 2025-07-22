@@ -21,24 +21,24 @@ export const StatusBar: React.FC<Stats> = ({
 }) => {
   return (
     <div>
-      <div className='grid grid-cols-[116px_37px_350px] items-center'>
-        <p className='text-md font-regular mr-auto'>HP</p>
-        <p className='text-md font-semibold'>{hp}</p>
+      <div className='grid grid-cols-[100px_51px_1fr] items-center md:grid-cols-[116px_37px_1fr]'>
+        <p className='md:text-md font-regular mr-auto text-sm'>HP</p>
+        <p className='md:text-md text-sm font-semibold'>{hp}</p>
         <Status val={hp} />
-        <p className='text-md font-regular mr-auto'>Attack</p>
-        <p className='text-md font-semibold'>{attack}</p>
+        <p className='md:text-md font-regular mr-auto text-sm'>Attack</p>
+        <p className='md:text-md text-sm font-semibold'>{attack}</p>
         <Status val={attack} />
-        <p className='text-md font-regular mr-auto'>Defense</p>
-        <p className='text-md font-semibold'>{defense}</p>
+        <p className='md:text-md font-regular mr-auto text-sm'>Defense</p>
+        <p className='md:text-md text-sm font-semibold'>{defense}</p>
         <Status val={defense} />
-        <p className='text-md font-regular mr-auto'>SP. Attack</p>
-        <p className='text-md font-semibold'>{specialAttack}</p>
+        <p className='md:text-md font-regular mr-auto text-sm'>SP. Attack</p>
+        <p className='md:text-md text-sm font-semibold'>{specialAttack}</p>
         <Status val={specialAttack} />
-        <p className='text-md font-regular mr-auto'>SP. Defense</p>
-        <p className='text-md font-semibold'>{specialDefense}</p>
+        <p className='md:text-md font-regular mr-auto text-sm'>SP. Defense</p>
+        <p className='md:text-md text-sm font-semibold'>{specialDefense}</p>
         <Status val={specialDefense} />
-        <p className='text-md font-regular mr-auto'>Speed</p>
-        <p className='text-md font-semibold'>{speed}</p>
+        <p className='md:text-md font-regular mr-auto text-sm'>Speed</p>
+        <p className='md:text-md text-sm font-semibold'>{speed}</p>
         <Status val={speed} />
       </div>
     </div>

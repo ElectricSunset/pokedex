@@ -1,8 +1,14 @@
 import React from 'react';
+import { cn, type classNameProps } from '../lib/utils';
 
-const Footer: React.FC = () => {
+const Footer: React.FC<classNameProps> = ({ className }) => {
   return (
-    <div className='flex flex-col items-center space-y-4 border border-neutral-300 bg-white px-4 py-10.5 md:flex-row md:gap-2 md:space-y-0 md:px-47'>
+    <div
+      className={cn(
+        'flex flex-col space-y-4 border border-neutral-300 bg-white px-4 py-10.5 md:flex-row md:gap-2 md:space-y-0 md:px-47',
+        className
+      )}
+    >
       <div className='flex items-center gap-2'>
         <img
           src='/Icons/Pokeball-Icon.svg'
