@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux';
 import type { RootState } from '../features/store';
+import type { PokemonData } from '../features/pokemonListSlice';
+import { getPokemonByURL, getPokemonData } from '../api/PokemonApi';
 
 interface pokemonListResponseProps {
   name: string;
@@ -16,15 +18,28 @@ export const handleAllPokemonList = (
   return allPokemonList;
 };
 
-export const useSearchPokemon = (pokemonName: string) => {
+export const useSearchPokemon = async (pokemonName: string) => {
   const homePokemonList = useSelector(
     (state: RootState) => state.pokemonList.homePokemonList
   );
+  const completePokemonList = useSelector(
+    (state: RootState) => state.completePokemonList
+  );
 
-  const key = pokemonName.toLowerCase();
+  const matchedPokemon = completePokemonList.filter((pokemon) =>
+    pokemon.includes(pokemonName.toLowerCase())
+  );
 
-  if (homePokemonList?.[key]) {
+  let pokemonRecord: Record<string, PokemonData> = {};
+
+  for (const pokemon in matchedPokemon) {
+    if (homePokemonList?.[pokemon]) {
+      pokemonRecord[pokemon] = homePokemonList[pokemon];
+    } else {
+      const response = await getPokemonData(pokemon);
+      pokemonRecord[pokemon] = response as PokemonData;
+    }
   }
 
-  return homePokemonList?.[key] ?? null;
+  return pokemonRecord;
 };

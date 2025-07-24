@@ -57,7 +57,7 @@ const Home: React.FC = () => {
     fetchPokemonList();
   }, []);
 
-  //
+  // All Pokemon List
   useEffect(() => {
     const fetchCompletePokemonList = async () => {
       const completePokemonListResponse = await getPokemonList(100000, 0);
@@ -66,6 +66,7 @@ const Home: React.FC = () => {
       );
       dispatch(setCompletePokemonList(completePokemonList));
     };
+    fetchCompletePokemonList();
   }, []);
 
   // To change cloud background
