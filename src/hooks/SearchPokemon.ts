@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import type { RootState } from '../features/store';
 import type { PokemonData } from '../features/pokemonListSlice';
-import { getPokemonByURL, getPokemonData } from '../api/PokemonApi';
+import { getPokemonData } from '../api/PokemonApi';
 
 interface pokemonListResponseProps {
   name: string;

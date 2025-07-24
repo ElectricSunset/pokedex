@@ -3,6 +3,7 @@ import {
   pokemonListReducer,
   pokemonDetailsReducer,
   completePokemonListReducer,
+  searchedPokemonReducer,
 } from './pokemonListSlice';
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     pokemonList: pokemonListReducer,
     pokemonDetail: pokemonDetailsReducer,
     completePokemonList: completePokemonListReducer,
+    searchedPokemon: searchedPokemonReducer,
   },
 });
 

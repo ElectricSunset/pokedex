@@ -19,8 +19,9 @@ import {
   setCompletePokemonList,
   type PokemonData,
   setPokemonDetails,
+  setSearchedPokemon,
 } from '../features/pokemonListSlice';
-import { handleAllPokemonList } from '../hooks/SearchPokemon';
+import { handleAllPokemonList, useSearchPokemon } from '../hooks/SearchPokemon';
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
@@ -108,6 +109,12 @@ const Home: React.FC = () => {
     navigate('/details');
   };
 
+  const handlePokemonSearch = (pokemonName: string) => {
+    const pokemonFound = useSearchPokemon(pokemonName);
+    dispatch(setSearchedPokemon(pokemonFound));
+    navigate('/search');
+  };
+
   return (
     <div className='bg-primary-300'>
       <Navigation
@@ -128,7 +135,8 @@ const Home: React.FC = () => {
           </p>
         </div>
       </div>
-      <Searchbar className='pb-20' />
+      {/* How to handle pokemon Search name */}
+      <Searchbar className='pb-20' onSubmit={handlePokemonSearch} />
       <div className='relative pt-33'>
         <img
           src='/Icons/Charizard.svg'

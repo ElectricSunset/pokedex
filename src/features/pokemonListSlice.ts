@@ -108,3 +108,16 @@ const completePokemonListSlice = createSlice({
 
 export const { setCompletePokemonList } = completePokemonListSlice.actions;
 export const completePokemonListReducer = completePokemonListSlice.reducer;
+
+const searchedPokemonSlice = createSlice({
+  name: 'searchedPokemon',
+  initialState: {},
+  reducers: {
+    setSearchedPokemon: (_state, action) => {
+      return action.payload;
+    },
+  },
+});
+
+export const { setSearchedPokemon } = searchedPokemonSlice.actions;
+export const searchedPokemonReducer = searchedPokemonSlice.reducer;
