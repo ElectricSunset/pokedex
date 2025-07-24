@@ -32,7 +32,7 @@ interface PokemonListState {
   homePokemonList: Record<string, PokemonData>;
   nextList: string | null;
 }
-// Need to change Data Structure later to accomodate search (maybe)
+
 const pokemonListInitialValue: PokemonListState = {
   homePokemonList: {},
   nextList: null,
@@ -93,3 +93,18 @@ const pokemonDetailSlice = createSlice({
 
 export const { setPokemonDetails } = pokemonDetailSlice.actions;
 export const pokemonDetailsReducer = pokemonDetailSlice.reducer;
+
+const completePokemonListInitialValue: string[] = [];
+
+const completePokemonListSlice = createSlice({
+  name: 'completePokemonList',
+  initialState: completePokemonListInitialValue,
+  reducers: {
+    setCompletePokemonList: (_state, action) => {
+      return action.payload;
+    },
+  },
+});
+
+export const { setCompletePokemonList } = completePokemonListSlice.actions;
+export const completePokemonListReducer = completePokemonListSlice.reducer;

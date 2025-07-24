@@ -16,9 +16,11 @@ import type { RootState } from '../features/store';
 import {
   setPokemonNextList,
   setPokemonList,
+  setCompletePokemonList,
   type PokemonData,
   setPokemonDetails,
 } from '../features/pokemonListSlice';
+import { handleAllPokemonList } from '../hooks/SearchPokemon';
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,6 +35,7 @@ const Home: React.FC = () => {
   );
   // const currentPokemon = useSelector((state: RootState) => state.pokemonDetail);
 
+  // Handle Navigation Color Change
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 600);
@@ -42,6 +45,7 @@ const Home: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Fetch Pokemon
   useEffect(() => {
     const fetchPokemonList = async () => {
       const pokemonListResponse = await getPokemonList(24, 0);
@@ -53,6 +57,18 @@ const Home: React.FC = () => {
     fetchPokemonList();
   }, []);
 
+  //
+  useEffect(() => {
+    const fetchCompletePokemonList = async () => {
+      const completePokemonListResponse = await getPokemonList(100000, 0);
+      const completePokemonList = handleAllPokemonList(
+        completePokemonListResponse.results
+      );
+      dispatch(setCompletePokemonList(completePokemonList));
+    };
+  }, []);
+
+  // To change cloud background
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)');
 
@@ -93,7 +109,10 @@ const Home: React.FC = () => {
 
   return (
     <div className='bg-primary-300'>
-      <Navigation className={scrolled ? 'bg-white' : 'bg-primary-300'} />
+      <Navigation
+        className={scrolled ? 'bg-white' : 'bg-primary-300'}
+        onClick={navigate('/')}
+      />
       <div className='flex-center px-4 pt-35 pb-7.5'>
         <div className='flex-center max-w-171.5 flex-col gap-3.75'>
           <img

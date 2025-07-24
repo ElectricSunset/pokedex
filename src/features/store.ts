@@ -1,10 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { pokemonListReducer, pokemonDetailsReducer } from './pokemonListSlice';
+import {
+  pokemonListReducer,
+  pokemonDetailsReducer,
+  completePokemonListReducer,
+} from './pokemonListSlice';
 
 export const store = configureStore({
   reducer: {
     pokemonList: pokemonListReducer,
     pokemonDetail: pokemonDetailsReducer,
+    completePokemonList: completePokemonListReducer,
   },
 });
 

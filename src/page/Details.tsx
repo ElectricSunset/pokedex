@@ -54,7 +54,7 @@ const Details: React.FC = () => {
 
   return (
     <div>
-      <SearchNavigation />
+      <SearchNavigation onClick={navigate('/')} />
       <div className='flex-center px-4 lg:px-15 xl:px-30'>
         <div className='w-full pt-35'>
           <button
